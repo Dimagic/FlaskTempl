@@ -1,0 +1,12 @@
+# IntellijIdea files
+*.iml
+.idea/
+out
+
+# venv
+.venv/
+
+# logs
+.logs/
+
+*.db
