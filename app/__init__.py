@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
-from flask import Flask
+import os
+import logging
+from lang import Lang
 from config import Config
+from logging.handlers import SMTPHandler
+from logging.handlers import RotatingFileHandler
+
+from flask import Flask
+from flask_babel import Babel
+from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
-import logging
-from logging.handlers import SMTPHandler
-from logging.handlers import RotatingFileHandler
 from flask_bootstrap import Bootstrap
-import os
-import messages
+from flask import request
+
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -18,9 +24,11 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 mail = Mail(app)
+moment = Moment(app)
 login = LoginManager(app)
 login.login_view = 'login'
-login.login_message = messages.login_message
+login.login_message = Lang().get_str('login_message')
+babel = Babel(app)
 
 from app import routes, models, errors
 
@@ -51,3 +59,8 @@ if not app.debug:
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('Microblog startup')
+
+
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(app.config['LANGUAGES'])

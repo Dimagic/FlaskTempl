@@ -12,6 +12,8 @@ class Config(object):
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    LANGUAGES = ['en', 'ru']
     ADMINS = ['s0adist@ya.ru']
 
     POSTS_PER_PAGE = 25
+
