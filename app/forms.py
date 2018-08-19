@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from flask_wtf import FlaskForm
-from flask_babel import _
+from datetime import date, timedelta
 from flask_babel import lazy_gettext as _l
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField, IntegerField, \
+    FloatField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
@@ -75,4 +76,19 @@ class ResetPasswordForm(FlaskForm):
         _l('Repeat Password'), validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField(_l('Request Password Reset'))
 
+
+class NewTravelForm(FlaskForm):
+    name = StringField(_l('Name'), validators=[DataRequired()])
+    description = TextAreaField(_l('Description'), validators=[DataRequired()])
+    date = DateField(_l('Date'), validators=[DataRequired()], format="%d/%m/%Y", default=date.today())
+    seats = IntegerField(_l('Number of seats'), validators=[DataRequired()])
+    price = FloatField(_l('Price'), validators=[DataRequired()])
+    submit = SubmitField(_l('Create'))
+
+    # def validate_price(self, price):
+    #     print(float(price.data))
+    #     try:
+    #         float(price.data)
+    #     except ValueError:
+    #         raise ValidationError(_l('Price field: incorrect data'))
 

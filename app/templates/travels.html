@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Launch Modal
+</button>
+
+{% for travel in travels %}
+<p>{{ travel.date.strftime('%Y-%m-%d') }}  {{ travel.name }}</p>
+
+{% endfor %}
+
+
+<!-- Sart Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="now-ui-icons ui-1_simple-remove"></i>
+                </button>
+                <h4 class="title title-up">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        <label>Name</label>
+                        <div>
+                            {{ form.name(class="form-control", placeholder="Name") }}
+                            {% for error in form.name.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Date</label>
+                            {{ form.date(class="form-control date-picker", placeholder="Date")}}
+                            {% for error in form.date.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            <label>Seats</label>
+                            {{ form.seats(class="form-control", placeholder="Seats")}}
+                            {% for error in form.seats.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            <label>Price</label>
+                            <div class="col">
+                                {{ form.price(class="form-control", placeholder="Price")}}
+                                {% for error in form.price.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label>Description</label>
+                        {{ form.description(class="form-control", placeholder="Description") }}
+                        {% for error in form.description.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--  End Modal -->
+
+{% endblock %}

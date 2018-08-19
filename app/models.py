@@ -15,6 +15,13 @@ followers = db.Table('followers',
                          db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
                          )
 
+travelers = db.Table('travelers',
+                     db.Column('travel', db.Integer, db.ForeignKey('travel.id')),
+                     db.Column('traveler', db.Integer, db.ForeignKey('user.id')),
+                     db.Column('count', db.Integer),
+                     db.Column('date_record', db.DateTime, default=datetime.utcnow)
+                     )
+
 
 @login.user_loader
 def load_user(id):
@@ -92,3 +99,15 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+
+class Travel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    description = db.Column(db.String(256))
+    date = db.Column(db.DateTime)
+    seats = db.Column(db.Integer)
+    price = db.Column(db.Float)
+
+    # def __repr__(self):
+    #     return '<Travel {}>'.format(self.name.decode('utf-8'))

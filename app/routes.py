@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from forms import LoginForm, EditProfileForm, ChangePasswordForm
+from forms import LoginForm, EditProfileForm, ChangePasswordForm, NewTravelForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from app.models import User, Travel
 from werkzeug.urls import url_parse
 from app.forms import RegistrationForm
-from datetime import datetime
+from datetime import datetime, date
 from app.forms import PostForm
 from app.models import Post
 from app.forms import ResetPasswordRequestForm
@@ -210,3 +210,26 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+
+@app.route('/travels', methods=['GET', 'POST'])
+@login_required
+def travels():
+    form = NewTravelForm()
+    if form.validate_on_submit():
+        if form.date.data < date.today():
+            flash('The date of the travel can not be earlier than the current date')
+            return redirect(url_for('travels'))
+        travel = Travel(name=form.name.data,
+                        description=form.description.data,
+                        date=form.date.data,
+                        seats=form.seats.data,
+                        price=form.price.data)
+        db.session.add(travel)
+        db.session.commit()
+        flash(form.validate())
+
+    travels = Travel.query.order_by(Travel.date.asc()).all()
+    return render_template('travels.html', form=form, title='Travels', travels=travels)
+
+
